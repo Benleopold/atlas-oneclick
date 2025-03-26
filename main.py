@@ -10,7 +10,7 @@ MODEL = "mistralai/Mistral-7B-Instruct-v0.1"
 async def chat(request: Request):
     body = await request.json()
     user_input = body.get("message")
-
+    
     response = requests.post(
         f"https://api-inference.huggingface.co/models/{MODEL}",
         headers={"Authorization": f"Bearer {HF_API_KEY}"},
