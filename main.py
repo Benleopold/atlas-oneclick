@@ -1,20 +1,15 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 import os
-import requests
 
 app = FastAPI()
-HF_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
-MODEL = "mistralai/Mistral-7B-Instruct-v0.1"
 
-@app.post("/chat")
-async def chat(request: Request):
-    body = await request.json()
-    user_input = body.get("message")
+@app.get("/")
+def read_root():
+    return {
+        "message": "Atlas is live!",
+        "huggingface": os.getenv("HF_API_KEY"),
+        "openai": os.getenv("OPENAI_API_KEY"),
+        "anthropic": os.getenv("ANTHROPIC_API_KEY"),
+        "db": os.getenv("DATABASE_URL")
+    }
     
-    response = requests.post(
-        f"https://api-inference.huggingface.co/models/{MODEL}",
-        headers={"Authorization": f"Bearer {HF_API_KEY}"},
-        json={"inputs": user_input}
-    )
-    result = response.json()
-    return {"response": result}
