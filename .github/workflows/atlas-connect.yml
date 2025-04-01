@@ -20,7 +20,11 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd runner
+          npm install
 
       - name: Run Atlas GitHub Runner
-        run: node atlas-github-runner.js
+        run: |
+          cd runner
+          node atlas-github-runner.js
