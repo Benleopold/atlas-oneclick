@@ -1,0 +1,17 @@
+name: Atlas Bootstrap
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Push Initial Atlas Framework
+        run: |
+          git config --global user.email "atlas@autonomous.ai"
+          git config --global user.name "Atlas Assistant"
+          curl -s https://raw.githubusercontent.com/Atlas-AI-Agent/bootstrap/main/atlas-init.sh | bash
