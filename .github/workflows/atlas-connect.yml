@@ -1,4 +1,4 @@
-name: Atlas Bootstrap
+name: Atlas GitHub Runner
 
 on:
   workflow_dispatch:
@@ -6,12 +6,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      ATLAS_PAT: ${{ secrets.ATLAS_PAT }}
+      ATLAS_REPO: ${{ secrets.ATLAS_REPO }}
+      ATLAS_BRANCH: ${{ secrets.ATLAS_BRANCH }}
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Push Initial Atlas Framework
-        run: |
-          git config --global user.email "atlas@autonomous.ai"
-          git config --global user.name "Atlas Assistant"
-          curl -s https://raw.githubusercontent.com/Atlas-AI-Agent/bootstrap/main/atlas-init.sh | bash
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Atlas GitHub Runner
+        run: node atlas-github-runner.js
