@@ -11,20 +11,16 @@ jobs:
       ATLAS_REPO: ${{ secrets.ATLAS_REPO }}
       ATLAS_BRANCH: ${{ secrets.ATLAS_BRANCH }}
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Node.js
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: |
-          cd runner
-          npm install
+        run: npm install
 
       - name: Run Atlas GitHub Runner
-        run: |
-          cd runner
-          node atlas-github-runner.js
+        run: node atlas-github-runner.js
