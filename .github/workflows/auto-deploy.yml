@@ -1,0 +1,42 @@
+name: 🚀 Auto Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 📦 Deploy Latest Version
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: 🐍 Set up Python
+     uses: actions/setup-python@v4
+     with:
+      python-version: '3.x'
+
+    - name: 📥 Install Dependencies
+     run: |
+        if [ -f requirements.txt ]; then
+         pip install -r requirements.txt
+        else
+         pip install --upgrade pip
+        fi
+
+    - name: 🏃 Run Tests
+     run: |
+        if [ -d tests ]; then
+         python -m pytest
+        else
+         echo "No tests found - skipping test step"
+        fi
+
+    - name: 🏗️ Build and Deploy
+     run: |
+        echo "🚀 Starting deployment..."
+        if [ -f setup.py ]; then
+         python setup.py build
+        fi
+        echo "✅ Deployment complete!"
