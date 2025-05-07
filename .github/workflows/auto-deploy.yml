@@ -9,34 +9,40 @@ jobs:
   deploy:
     name: 📦 Deploy Latest Version
     runs-on: ubuntu-latest
+    env:
+      AUTH_TOKEN: ${{ secrets.DEPLOYMENT_TOKEN }}
     steps:
     - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.DEPLOYMENT_TOKEN }}
 
     - name: 🐍 Set up Python
-     uses: actions/setup-python@v4
-     with:
-      python-version: '3.x'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
     - name: 📥 Install Dependencies
-     run: |
+      run: |
         if [ -f requirements.txt ]; then
-         pip install -r requirements.txt
+          pip install -r requirements.txt
         else
-         pip install --upgrade pip
+          pip install --upgrade pip
         fi
 
     - name: 🏃 Run Tests
-     run: |
+      run: |
         if [ -d tests ]; then
-         python -m pytest
+          python -m pytest
         else
-         echo "No tests found - skipping test step"
+          echo "No tests found - skipping test step"
         fi
 
     - name: 🏗️ Build and Deploy
-     run: |
+      run: |
         echo "🚀 Starting deployment..."
         if [ -f setup.py ]; then
-         python setup.py build
+          python setup.py build
         fi
+        git config --global user.email "atlas-bot@example.com"
+        git config --global user.name "Atlas Deployment Bot"
         echo "✅ Deployment complete!"
